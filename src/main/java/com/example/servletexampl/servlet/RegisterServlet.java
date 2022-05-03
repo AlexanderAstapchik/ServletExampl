@@ -7,10 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 @WebServlet(value = "/register")
 public class RegisterServlet extends HttpServlet {
@@ -38,12 +35,18 @@ public class RegisterServlet extends HttpServlet {
             ps.setString(2,username);
             ps.setString(3,password1);
             ps.setString(4,password2);
-            ps.executeUpdate();
 
+            Statement stmt=connection.createStatement();
+            String query1 = "select * from users where  username='"+username+"'";
+            ResultSet resultSet= stmt.executeQuery(query1);
+            if(resultSet.next()){
+                getServletContext().getRequestDispatcher("/failregister.jsp").forward(req, resp);
+            } else {
+                ps.executeUpdate();
+                getServletContext().getRequestDispatcher("/pages/calc.jsp").forward(req, resp);
+            }
         } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException(e);
         }
-      getServletContext().getRequestDispatcher("/pages/calc.jsp").forward(req, resp);
-
     }
 }
