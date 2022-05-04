@@ -11,7 +11,7 @@ import java.sql.*;
 
 @WebServlet(value = "/register")
 public class RegisterServlet extends HttpServlet {
-    String user,username, password1,password2;
+   public static String user,username, password1,password2;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
